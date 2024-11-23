@@ -1,0 +1,137 @@
+USE [Medical_Inv_DB]
+GO
+
+/****** Object:  Table [dbo].[POS_BS_Categories]    Script Date: 11/23/2024 9:20:56 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[POS_BS_Categories](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Categories_Name] [nvarchar](50) NULL,
+	[Create_By] [int] NULL,
+	[Create_Date] [datetime] NULL,
+ CONSTRAINT [PK_POS_BS_Categories] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[POS_BS_Categories] ADD  CONSTRAINT [DF_POS_BS_Categories_Create_Date]  DEFAULT (getdate()) FOR [Create_Date]
+GO
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+/****** Object:  Table [dbo].[POS_BS_Product]    Script Date: 11/23/2024 9:21:28 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[POS_BS_Product](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Item_Name] [nvarchar](50) NULL,
+	[Item_Price] [decimal](18, 2) NULL,
+	[CategoryID] [int] NULL,
+	[IsActive] [int] NULL,
+	[Create_By] [int] NULL,
+	[Create_Date] [datetime] NULL,
+	[Image] [nvarchar](max) NULL,
+ CONSTRAINT [PK_POS_BS_Product] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[POS_BS_Product] ADD  CONSTRAINT [DF_POS_BS_Product_Create_Date]  DEFAULT (getdate()) FOR [Create_Date]
+GO
+-------------------------------------------------------------------------------------------------------------------
+
+
+/****** Object:  Table [dbo].[POS_sales]    Script Date: 11/23/2024 9:21:59 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[POS_sales](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Invoice]  AS (((((CONVERT([varchar](10),'Inv ')+CONVERT([varchar](10),datepart(month,getdate())))+'-')+CONVERT([varchar](10),datepart(year,getdate())))+'-')+CONVERT([varchar](10),right('00000'+CONVERT([varchar](10),[Id]),(8)))),
+	[TotalAmount] [decimal](18, 2) NULL,
+	[Create_By] [int] NULL,
+	[Create_Date] [datetime] NULL,
+ CONSTRAINT [PK_POS_sales] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[POS_sales] ADD  CONSTRAINT [DF_POS_sales_Create_Date]  DEFAULT (getdate()) FOR [Create_Date]
+GO
+-------------------------------------------------------------------------------------------------------------------
+
+
+
+/****** Object:  Table [dbo].[POS_Sales_Details]    Script Date: 11/23/2024 9:22:17 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[POS_Sales_Details](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[salesId] [int] NULL,
+	[ItemId] [int] NULL,
+	[Create_By] [int] NULL,
+	[Create_Date] [datetime] NULL,
+ CONSTRAINT [PK_POS_Sales_d] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[POS_Sales_Details] ADD  CONSTRAINT [DF_POS_Sales_d_Create_Date]  DEFAULT (getdate()) FOR [Create_Date]
+GO
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+/****** Object:  Table [dbo].[POS_User_Login]    Script Date: 11/23/2024 9:22:42 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[POS_User_Login](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [nvarchar](50) NULL,
+	[Password] [nvarchar](max) NULL,
+	[Roll_id] [int] NULL,
+	[Create_Date] [datetime] NULL,
+	[IsActive] [int] NULL,
+ CONSTRAINT [PK_POS_User_Login] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[POS_User_Login] ADD  CONSTRAINT [DF_POS_User_Login_Create_Date]  DEFAULT (getdate()) FOR [Create_Date]
+GO
+
+ALTER TABLE [dbo].[POS_User_Login] ADD  CONSTRAINT [DF_POS_User_Login_IsActive]  DEFAULT ((0)) FOR [IsActive]
+GO
+
+
